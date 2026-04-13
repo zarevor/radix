@@ -1,0 +1,102 @@
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─шалаш  has index: 1 children:  0,0  with parent index:  0 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─шал  has index: 1 children:  1,3  with parent index:  0
+ offset = 1    ├─аш  has index: 2 children:  0,0  with parent index:  1 (end)
+ offset = 2    ├─ость  has index: 3 children:  2,2  with parent index:  1 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  3,5  with parent index:  0
+ offset = 3    ├─кал  has index: 5 children:  4,4  with parent index:  1 (end)
+ offset = 4    ├─л  has index: 4 children:  1,3  with parent index:  1
+ offset = 1      ├─аш  has index: 2 children:  0,0  with parent index:  4 (end)
+ offset = 2      ├─ость  has index: 3 children:  2,2  with parent index:  4 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,6  with parent index:  0
+ offset = 4    ├─кал  has index: 5 children:  5,5  with parent index:  1 (end)
+ offset = 5    ├─л  has index: 4 children:  1,4  with parent index:  1
+ offset = 1      ├─аш  has index: 2 children:  0,0  with parent index:  4 (end)
+ offset = 2      ├─ить  has index: 6 children:  5,5  with parent index:  4 (end)
+ offset = 3      ├─ость  has index: 3 children:  2,2  with parent index:  4 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,6  with parent index:  0
+ offset = 4    ├─ьной  has index: 7 children:  6,6  with parent index:  4 (end)
+ offset = 5    ├─кал  has index: 5 children:  6,6  with parent index:  1 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,7  with parent index:  0
+ offset = 4    ├─ьной  has index: 7 children:  6,6  with parent index:  4 (end)
+ offset = 5    ├─кал  has index: 5 children:  6,6  with parent index:  1 (end)
+ offset = 6    ├─ловливый  has index: 8 children:  7,7  with parent index:  1 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,7  with parent index:  0
+ offset = 4    ├─ьной  has index: 7 children:  6,6  with parent index:  4 (end)
+ offset = 5    ├─кал  has index: 5 children:  6,6  with parent index:  1 (end)
+ offset = 6    ├─л  has index: 8 children:  8,10  with parent index:  1
+ offset = 8      ├─ашный  has index: 10 children:  9,9  with parent index:  8 (end)
+ offset = 9      ├─овливый  has index: 9 children:  7,7  with parent index:  8 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,7  with parent index:  0
+ offset = 4    ├─ьной  has index: 7 children:  6,6  with parent index:  4 (end)
+ offset = 5    ├─кал  has index: 5 children:  6,6  with parent index:  1 (end)
+ offset = 6    ├─л  has index: 8 children:  8,10  with parent index:  1
+ offset = 8      ├─ашны  has index: 10 children:  10,12  with parent index:  8
+ offset = 10        ├─е  has index: 12 children:  11,11  with parent index:  10 (end)
+ offset = 11        ├─й  has index: 11 children:  9,9  with parent index:  10 (end)
+ offset = 9      ├─овливый  has index: 9 children:  7,7  with parent index:  8 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ша  has index: 1 children:  4,8  with parent index:  0
+ offset = 4    ├─башка  has index: 13 children:  12,12  with parent index:  1 (end)
+ offset = 5    ├─ьной  has index: 7 children:  7,7  with parent index:  4 (end)
+ offset = 6    ├─кал  has index: 5 children:  7,7  with parent index:  1 (end)
+ offset = 7    ├─л  has index: 8 children:  9,11  with parent index:  1
+ offset = 9      ├─ашны  has index: 10 children:  11,13  with parent index:  8
+ offset = 11        ├─е  has index: 12 children:  12,12  with parent index:  10 (end)
+ offset = 12        ├─й  has index: 11 children:  9,9  with parent index:  10 (end)
+ offset = 10      ├─овливый  has index: 9 children:  8,8  with parent index:  8 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ш  has index: 1 children:  13,15  with parent index:  0
+ offset = 13    ├─а  has index: 14 children:  4,8  with parent index:  1
+ offset = 4      ├─башка  has index: 13 children:  12,12  with parent index:  14 (end)
+ offset = 5      ├─ьной  has index: 7 children:  7,7  with parent index:  14 (end)
+ offset = 6      ├─кал  has index: 5 children:  7,7  with parent index:  14 (end)
+ offset = 7      ├─л  has index: 8 children:  9,11  with parent index:  14
+ offset = 9        ├─ашны  has index: 10 children:  11,13  with parent index:  8
+ offset = 11          ├─е  has index: 12 children:  12,12  with parent index:  10 (end)
+ offset = 12          ├─й  has index: 11 children:  9,9  with parent index:  10 (end)
+ offset = 10        ├─овливый  has index: 9 children:  8,8  with parent index:  8 (end)
+ offset = 14    ├─ерсть  has index: 15 children:  14,14  with parent index:  1 (end)
+
+
+├─''  has index: 0 children:  0,1  with parent index:  4294967295
+ offset = 0  ├─ш  has index: 1 children:  13,15  with parent index:  0
+ offset = 13    ├─а  has index: 14 children:  4,8  with parent index:  1
+ offset = 4      ├─башка  has index: 13 children:  12,12  with parent index:  14 (end)
+ offset = 5      ├─ьной  has index: 7 children:  7,7  with parent index:  14 (end)
+ offset = 6      ├─кал  has index: 5 children:  7,7  with parent index:  14 (end)
+ offset = 7      ├─л  has index: 8 children:  9,11  with parent index:  14
+ offset = 9        ├─ашны  has index: 10 children:  11,13  with parent index:  8
+ offset = 11          ├─е  has index: 12 children:  12,12  with parent index:  10 (end)
+ offset = 12          ├─й  has index: 11 children:  9,9  with parent index:  10 (end)
+ offset = 10        ├─овливый  has index: 9 children:  8,8  with parent index:  8 (end)
+ offset = 14    ├─ерст  has index: 15 children:  15,17  with parent index:  1
+ offset = 15      ├─ь  has index: 16 children:  14,14  with parent index:  15 (end)
+ offset = 16      ├─яной  has index: 17 children:  16,16  with parent index:  15 (end)

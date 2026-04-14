@@ -1,6 +1,9 @@
 
 new word adding
-шалаш
+
+
+new word adding
+шал
 
 
 new word adding
@@ -9,23 +12,11 @@ new word adding
 
 
 new word adding
-аш
-ость
-шал
-
-
-new word adding
-аш
-ость
-л
 ша
 
 
 new word adding
 кал
-аш
-ость
-л
 ша
 
 
@@ -44,14 +35,12 @@ new word adding
 new word adding
 ьной
 кал
-ловливый
 ша
 
 
 new word adding
 ьной
 кал
-овливый
 л
 ша
 
@@ -60,7 +49,6 @@ new word adding
 ьной
 кал
 ашный
-овливый
 л
 ша
 
@@ -68,7 +56,6 @@ new word adding
 new word adding
 ьной
 кал
-й
 ашны
 овливый
 л
@@ -79,11 +66,21 @@ new word adding
 ьной
 кал
 е
-й
 ашны
 овливый
 л
 ша
+
+
+new word adding
+башка
+ьной
+кал
+ша
+
+
+new word adding
+ш
 
 
 new word adding
@@ -99,18 +96,6 @@ new word adding
 е
 ашны
 л
-ша
-
-
-new word adding
-башка
-ьной
-кал
-е
-й
-ашны
-овливый
-л
 а
 ш
 
@@ -119,27 +104,16 @@ new word adding
 башка
 ьной
 кал
-е
-й
-ашны
-овливый
-л
-а
-ерсть
-ш
-
-
-new word adding
+аш
+ить
+ость
 башка
-ьной
-кал
-е
-й
-ашны
+л
 овливый
+е
+ашны
 л
 а
-ь
 ерст
 ш
 
@@ -148,14 +122,21 @@ new word adding
 башка
 ьной
 кал
-е
-й
-ашны
+аш
+ить
+ость
+башка
+л
 овливый
+е
+ашны
 л
 а
 ь
-яной
 ерст
 ш
+
+
+new word adding
+вровень
 

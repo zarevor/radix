@@ -131,6 +131,8 @@ int main()
     tree.print(); 
     tree.insert("шерстяной");
     tree.print(); 
+    tree.insert("вровень");
+    tree.print(); 
    /*  tree.insert("кусать");
     tree.print(); 
     tree.insert("мастерить");

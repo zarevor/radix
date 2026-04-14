@@ -210,70 +210,36 @@ public:
             file2 << "\n";
             if (node.firstChildOffset > insertPos && node_idx != childIdx)
             {
-                uint32_t oldOffset = node.firstChildOffset;
+                
                 node.firstChildOffset++;
 
-                if (node.parentOffset != UINT32_MAX)
-                {
-                    Node& par = nodes[node.parentOffset];
-
-                    if(shiftedParents.find(node.parentOffset)==shiftedParents.end()){
-                       // std::cout<<"parent offset is"<<node.parentOffset<<std::endl;
-                        
-                        if (((node.firstChildOffset + node.childrenCount) - 1) == par.firstChildOffset)
-                        {
-                            par.firstChildOffset++;
-                            shiftedParents.insert(node.parentOffset);
-                        }
-                    }
-
-                    
-                }
             }
-        };
-        std::function<void(uint32_t)> updateParents= [&](uint32_t node_idx)
-        {
-            Node &node = nodes[node_idx];
-
-            for (size_t i = 0; i < node.childrenCount; i++)
+            // Никак не могу понять как обновлять родителей. при добавлении
+            /* if (node.parentOffset != UINT32_MAX)
             {
-                updateParents(children[node.firstChildOffset+i].nodeOffset);
-            }
-            if(node.parentOffset!= UINT32_MAX){
-                Node& par = nodes[node.parentOffset];
+                Node &par = nodes[node.parentOffset];
+                uint32_t firstChildOfParent = children[par.firstChildOffset].nodeOffset;
 
-                if((par.firstChildOffset+par.childrenCount) == node.firstChildOffset){
-                    uint32_t firstChildIdx = children[parent.firstChildOffset].nodeOffset;
-                    if(nodes[firstChildIdx].firstChildOffset > insertPos){
+
+                
+                if (firstChildOfParent == node_idx&& par.firstChildOffset<=insertPos)
+                {
+                    if(node_idx!=childIdx&&node.childrenCount>0){
 
                         par.firstChildOffset++;
                     }
+
+                    //shiftedParents.insert(node.parentOffset);
                 }
-            }
-
-            
-
-
+            } */
         };
+        
 
 
 
-        parent.childrenCount++;
         shiftOffsets(0);
-        //updateParents(0);
-        
+        parent.childrenCount++;
 
-        
-
-        /* if(child.firstChildOffset == children.size()-1&&child.childrenCount==0){
-            child.firstChildOffset = children.size();
-            std::cout<<"insertPos = childrenSize =  "<<children.size()<<std::endl;
-            //std::cout<<"child  "<<getString(child.labelOffset,child.labelLength);
-            //std::cout<<"with parent  "<<getString(parent.labelOffset,parent.labelLength)<<std::endl;
-            std::cout<<" child index is = "<<childIdx<<"  parent index is = "<<parentIdx<<std::endl;
-            //children.resize(insertPos+1);
-
-        } */
         
     }
 

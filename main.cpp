@@ -22,6 +22,7 @@ int main()
     /* tree.insert("вагон");
     tree.insert("вагончик");
     tree.insert("вагонный");
+    
     tree.insert("железо");
     tree.insert("корабль");
     tree.insert("железобетонный");

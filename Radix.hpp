@@ -198,13 +198,14 @@ public:
             
             for(int i = 0; i<node.childrenCount; i++){
                 const ChildEntryUTF8 & child = children[node.firstChildOffset+i];
+                shiftOffsets(child.nodeOffset);
                 childIndices.push_back(child.nodeOffset);
             }
 
-            for (uint32_t childIdx : childIndices)
+            /* for (uint32_t childIdx : childIndices)
             {
                 shiftOffsets(childIdx);
-            }
+            } */
             //std::cout<<getString(node.labelOffset,node.labelLength)<<std::endl;
             file2 << getString(node.labelOffset, node.labelLength);
             file2 << "\n";

@@ -35,7 +35,7 @@ int main()
     tree.print(); */
 
     // SetConsoleOutputCP(CP_UTF8);
-   /*  std::string fileName = "rus-ir.bin";
+    std::string fileName = "rus-ir.bin";
      if (!std::filesystem::exists(fileName))
     {
        std::vector<char> buffer;
@@ -104,8 +104,17 @@ int main()
     }else
     {
         tree.deserialize(fileName);
-    } */
-    std::ofstream file("log.txt",std::ios::trunc);
+    }
+
+    std::cout << tree.search("эксперимснтальный") << std::endl;
+    std::cout << tree.search("алчность") << std::endl;
+    std::cout << tree.search("вагон") << std::endl;
+    std::cout << tree.search("экстракт") << std::endl;
+    std::cout << tree.search("кукареку") << std::endl;
+    std::cout << tree.search("щегольнуть") << std::endl;
+
+    std::cout << tree.search("шаловливый") << std::endl;
+    /* std::ofstream file("log.txt",std::ios::trunc);
     file.close();
     tree.insert("шалаш");
     tree.print();
@@ -118,6 +127,11 @@ int main()
 
     tree.insert("шальной");
     tree.print();
+    //удивительно. но когда я меняю смещение в ручную. дерево строится правильно.
+    //значит где ошибка в addChild. пока не могу понять
+    
+
+
     tree.insert("шаловливый");
     tree.print();
 
@@ -134,7 +148,8 @@ int main()
     tree.print(); 
     tree.insert("вровень");
     tree.print(); 
-   /*  tree.insert("кусать");
+
+    tree.insert("кусать");
     tree.print(); 
     tree.insert("мастерить");
     tree.print(); 

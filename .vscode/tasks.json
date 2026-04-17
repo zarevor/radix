@@ -3,8 +3,8 @@
 	"tasks": [
 		{
 			"type": "cppbuild",
-			"label": "C/C++: g++.exe build active file",
-			"command": "C:\\Users\\User\\Desktop\\oleg\\compilers\\mingw64\\bin\\g++.exe",
+			"label": "C/C++: g++.exe сборка активного файла",
+			"command": "C:\\Users\\usr\\Desktop\\mingw64\\bin\\g++.exe",
 			"args": [
 				"-fdiagnostics-color=always",
 				"-g",
@@ -22,7 +22,7 @@
 				"kind": "build",
 				"isDefault": true
 			},
-			"detail": "compiler: C:\\Users\\User\\Desktop\\oleg\\compilers\\mingw64\\bin\\g++.exe"
+			"detail": "компилятор: C:\\Users\\usr\\Desktop\\mingw64\\bin\\g++.exe"
 		}
 	]
 }

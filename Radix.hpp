@@ -113,8 +113,12 @@ public:
     // Добавление ребенка
     void addChild(uint32_t parentIdx, char32_t key, uint32_t childIdx)
     {
+        
         Node &parent = nodes[parentIdx];
         Node &child = nodes[childIdx];
+        //std::cout<<getString(child.labelOffset,child.labelLength)<<std::endl;
+       // std::cout<<child.firstChildOffset<<std::endl;
+
 
 
         if(parent.childrenCount == 0){
@@ -147,99 +151,132 @@ public:
 
         
 
-        //parent.childrenCount++;
-
-
         // Обновляем firstChildOffset для всех узлов, у которых дети идут после вставки
-        /* for (Node &node : nodes)
-        {
-            if (node.firstChildOffset > insertPos)
+        parent.childrenCount++;
+        for(int i=0; i<nodes.size();i++){
+            if (nodes[i].firstChildOffset > insertPos&& i!=childIdx)
             {
-                node.firstChildOffset++;
-            }
-        } */
+                nodes[i].firstChildOffset++;
 
-        /* std::function<void(uint32_t)> traverse = [&](uint32_t node_idx)
-        {
-            Node &node = nodes[node_idx];
-
-            if (node.firstChildOffset > insertPos && node_idx != childIdx)
-            {
-                node.firstChildOffset++;
-                
-
-            }
-
-            for(int i =0; i<node.childrenCount; i++)
-            {
-                const ChildEntryUTF8 &child = children[node.firstChildOffset + i];
-
-
-                traverse(child.nodeOffset);
                 
             }
-
             
 
-        };
-        traverse(0); */
+        }
+        //print();
+        if(children.size()>insertPos+1){
+            uint32_t curParentOffset = children[insertPos].nodeOffset;
+            uint32_t nextParentOffset = children[insertPos+1].nodeOffset;
+
+            //я ошибся надо ведб сверять parent offset children 
+
+            Node& nextChildNode = nodes[nextParentOffset];
+            Node& nextParentNode = nodes[nextChildNode.parentOffset];
+
+            Node& currChildNode = nodes[curParentOffset];
+            Node& currParentNode = nodes[currChildNode.parentOffset];
+
+            if(nextParentNode.firstChildOffset==insertPos&&parent.childrenCount!=0&&currChildNode.parentOffset!=nextChildNode.parentOffset){
+                std::string str = getString(nextChildNode.labelOffset,nextChildNode.labelLength);
+                //std::cout<<"updated"<<std::endl;
+                nextParentNode.firstChildOffset++;
+            }
+        }
+       /*  for(int i=0; i<nodes.size();i++){
+            if (nodes[i].firstChildOffset > insertPos&&nodes[i].childrenCount!=0&& i!=childIdx)
+            {
+                nodes[i].firstChildOffset++;
+
+                
+            }
+            
+
+        }
+
+        uint32_t current = childIdx;
+        uint32_t offset = child.firstChildOffset;
+
+        while (current!=0)
+        {
+           Node& currentNode = nodes[current];
+           Node& parentNode = nodes[currentNode.parentOffset];
+
+           if(parentNode.firstChildOffset==offset&&nodes[childIdx].childrenCount!=0){
+                parentNode.firstChildOffset++;
+                break;
+           }
+           current = currentNode.parentOffset;
+        } */
+        
+
+
+
+
+      
+
+        
         std::unordered_set<uint32_t> shiftedParents;
         
-        file2<<"\n";
-        file2<<"new word adding"<<"\n";
+        /* file2<<"\n";
+        file2<<"new word adding"<<"\n"; */
         //file2<<"\n";
+        //я хочу спускаться рекурсивно вниз обновляя оффсеты после вставки.
  
-        std::function<void(uint32_t)> shiftOffsets= [&](uint32_t node_idx)
+      /*   std::function<void(uint32_t)> shiftOffsets= [&](uint32_t node_idx)
         {
             Node &node = nodes[node_idx];
 
             std::vector<uint32_t> childIndices;
-            childIndices.reserve(node.childrenCount);
+            //childIndices.reserve(node.childrenCount);
             
             for(int i = 0; i<node.childrenCount; i++){
                 const ChildEntryUTF8 & child = children[node.firstChildOffset+i];
                 shiftOffsets(child.nodeOffset);
-                childIndices.push_back(child.nodeOffset);
+                //childIndices.push_back(child.nodeOffset);
             }
 
-            /* for (uint32_t childIdx : childIndices)
-            {
-                shiftOffsets(childIdx);
-            } */
-            //std::cout<<getString(node.labelOffset,node.labelLength)<<std::endl;
+            
             file2 << getString(node.labelOffset, node.labelLength);
             file2 << "\n";
             if (node.firstChildOffset > insertPos && node_idx != childIdx)
             {
-                
+            
                 node.firstChildOffset++;
 
             }
             // Никак не могу понять как обновлять родителей. при добавлении
-            /* if (node.parentOffset != UINT32_MAX)
+            
+            if (node.parentOffset != UINT32_MAX)
             {
-                Node &par = nodes[node.parentOffset];
-                uint32_t firstChildOfParent = children[par.firstChildOffset].nodeOffset;
-
-
                 
-                if (firstChildOfParent == node_idx&& par.firstChildOffset<=insertPos)
+
+                uint32_t currentOffset = node.firstChildOffset;
+                
+                uint32_t currentIndex = node_idx;
+
+                while (currentIndex!=0)
                 {
-                    if(node_idx!=childIdx&&node.childrenCount>0){
+                    //std::cout<<"parentUpdate"<<std::endl;
+                    Node& parentNode = nodes[nodes[currentIndex].parentOffset];
 
-                        par.firstChildOffset++;
+                    if (parentNode.firstChildOffset == node.firstChildOffset&&node.childrenCount!=0)
+                    {
+                        std::cout<<"parentUpdate"<<std::endl;
+                        parentNode.firstChildOffset++;
+                        break;
                     }
-
-                    //shiftedParents.insert(node.parentOffset);
+                    currentIndex = nodes[currentIndex].parentOffset;
+                    
                 }
-            } */
+                
+                
+                
+            }
         };
-        
-
-
 
         shiftOffsets(0);
-        parent.childrenCount++;
+          parent.childrenCount++; */
+        
 
         
     }

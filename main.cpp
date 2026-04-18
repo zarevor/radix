@@ -11,12 +11,12 @@
 #include<fstream>
 int main()
 {
-    /*  setlocale(LC_ALL,"ru");
-    SetConsoleCP(1251);
+     setlocale(LC_ALL,"ru");
+    /* SetConsoleCP(1251);
     SetConsoleOutputCP(1251);  */
 
-    SetConsoleCP(CP_UTF8);
-    SetConsoleOutputCP(CP_UTF8);
+    SetConsoleCP(65001);
+    SetConsoleOutputCP(65001);
     OptimizedRadixTree tree;
 
     /* tree.insert("вагон");
@@ -106,14 +106,17 @@ int main()
         tree.deserialize(fileName);
     }
 
-    std::cout << tree.search("эксперимснтальный") << std::endl;
-    std::cout << tree.search("алчность") << std::endl;
-    std::cout << tree.search("вагон") << std::endl;
-    std::cout << tree.search("экстракт") << std::endl;
-    std::cout << tree.search("кукареку") << std::endl;
-    std::cout << tree.search("щегольнуть") << std::endl;
+    std::cout<<"word  "<<(tree.search("варит")?"  exists":"  doesnt exists")<<std::endl;
 
-    std::cout << tree.search("шаловливый") << std::endl;
+
+    std::string line;
+
+    /* while(std::getline(std::cin,line)){
+        if(line == "стоп"){
+            break;
+        }
+        std::cout<<"word  "<<line<<(tree.search(line)?"  exists":"  doesnt exists")<<std::endl;
+    } */
     /* std::ofstream file("log.txt",std::ios::trunc);
     file.close();
     tree.insert("шалаш");

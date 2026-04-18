@@ -497,6 +497,134 @@ public:
         nodes.push_back(newNode);
         return newIdx;
     }
+    std::vector<std::string> findWordsWithPrefix( std::string& prefix) {
+        uint32_t node_idx = findPrefixNode(0, prefix);
+
+
+        std::function<void(uint32_t,const std::string&,std::vector<std::string>&)> collect = 
+        [&](uint32_t idx,const std::string& current,std::vector<std::string>& result){
+            Node& node = nodes[idx];
+            if(node.isEndOfWord){
+                result.push_back(current);
+            }
+            for(int i = 0;i<node.childrenCount;i++){
+                uint32_t childOffset = node.firstChildOffset+i;
+                ChildEntryUTF8& entry = children[childOffset];
+                Node& childNode = nodes[entry.nodeOffset];
+                std::string child_prefix = getString(childNode.labelOffset,childNode.labelLength);
+
+                collect(entry.nodeOffset,current+child_prefix,result);
+            }
+        };
+        std::vector<std::wstring> result;
+
+        /* void collectWords(RadixNode * node, const std::wstring &current,
+                          std::vector<std::wstring> &result)
+        {
+            if (node->is_end)
+            {
+                result.push_back(current);
+            }
+            for (auto child : node->children)
+            {
+                collectWords(child, current + child->label, result);
+            }
+        } */
+
+
+        /* if (node) {
+            
+            
+            collectWords(node, prefix, result);
+
+        } */
+        return {};
+    }
+
+
+     uint32_t findPrefixNode(uint32_t current, std::string& prefix) {
+        //size_t pos = 0;
+        auto startPrefix = prefix.begin();
+        auto endPrefix = prefix.end();
+        auto currPreifx = startPrefix;
+
+        uint32_t prefixLen = prefix.length();
+        uint32_t remindedPrefix = 0;
+        size_t pos = 0;
+        while (pos < prefix.length()) {
+            //нужно сделать обаработку utf8 символов, наверное буду обрезать строку
+            //и брать след символ
+
+            std::string restPrefix = prefix.substr(pos);
+            
+            auto restPrefStart = restPrefix.begin();
+            auto restPrefEnd = restPrefix.end();
+            auto restPrefCurr = restPrefStart;
+
+            char32_t firstChar32 = utf8::peek_next(restPrefCurr, restPrefEnd);
+
+
+            //remindedPrefix = 
+            
+            uint32_t child_idx = findChild(current,firstChar32);
+            
+            //RadixNode* child = node->find_child(c);
+
+            
+            if(child_idx==UINT32_MAX){
+                return UINT32_MAX;
+            }
+            Node& child_node = nodes[child_idx];
+            
+            size_t restPrefLen = restPrefix.length();
+            size_t chPrefLength = child_node.labelLength;
+            std::string child_pref = getString(child_node.labelOffset,child_node.labelLength);
+
+           // std::wcout<<"node has "<<child->label<<" :"<<child->children.size()<<std::endl;
+
+
+            size_t minLen = std::min(restPrefix.length(),chPrefLength);
+            size_t commonLen = 0;
+
+
+            auto childPrefStart = child_pref.begin();
+            auto childPrefEnd = child_pref.end();
+            auto childPrefCurr = childPrefStart;
+
+            
+            while (commonLen < minLen)
+            {
+                uint32_t cp1 = utf8::next(restPrefCurr, restPrefEnd);
+                uint32_t cp2 = utf8::next(childPrefCurr, childPrefEnd);
+                if (cp1 != cp2)
+                {
+
+                    break;
+                }
+                commonLen = restPrefCurr-restPrefStart;
+
+            }
+            //isCommonChild  
+
+            if (commonLen == 0)
+            {
+                return UINT32_MAX;
+            }else if(commonLen!= minLen){
+                return UINT32_MAX;
+            }else if(commonLen == restPrefLen){
+                if (commonLen < chPrefLength)
+                {
+                    prefix += getString(child_node.labelOffset,child_node.labelLength);
+                }
+                return child_idx;
+            }
+
+            pos += chPrefLength;
+            current = child_idx;
+        }
+        //заглушка
+        return current;
+    }
 
     // Поиск слова
     bool search(const std::string &word) const

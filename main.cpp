@@ -106,10 +106,14 @@ int main()
         tree.deserialize(fileName);
     }
 
-    std::cout<<"word  "<<(tree.search("варит")?"  exists":"  doesnt exists")<<std::endl;
+    std::cout<<"word  "<<(tree.search("хвастливый")?"  exists":"  doesnt exists")<<std::endl;
+    std::string pref = "ал";
+    uint32_t ind = tree.findPrefixNode(0,pref);
 
 
     std::string line;
+
+    //tree.findPrefixNode
 
     /* while(std::getline(std::cin,line)){
         if(line == "стоп"){

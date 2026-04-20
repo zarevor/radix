@@ -497,8 +497,15 @@ public:
         nodes.push_back(newNode);
         return newIdx;
     }
-    std::vector<std::string> findWordsWithPrefix( std::string& prefix) {
-        uint32_t node_idx = findPrefixNode(0, prefix);
+    std::vector<std::string> findWordsWithPrefix(const std::string& prefix) {
+        std::string mut_prefix = prefix;
+        uint32_t node_idx = findPrefixNode(0, mut_prefix);
+
+        if(node_idx==UINT32_MAX){
+            return {};
+        }
+
+        auto found = getString(nodes[node_idx].labelOffset,nodes[node_idx].labelLength);
 
 
         std::function<void(uint32_t,const std::string&,std::vector<std::string>&)> collect = 
@@ -516,7 +523,8 @@ public:
                 collect(entry.nodeOffset,current+child_prefix,result);
             }
         };
-        std::vector<std::wstring> result;
+        std::vector<std::string> result;
+        collect(node_idx,mut_prefix,result);
 
         /* void collectWords(RadixNode * node, const std::wstring &current,
                           std::vector<std::wstring> &result)
@@ -538,7 +546,7 @@ public:
             collectWords(node, prefix, result);
 
         } */
-        return {};
+        return result;
     }
 
 
@@ -614,7 +622,7 @@ public:
             }else if(commonLen == restPrefLen){
                 if (commonLen < chPrefLength)
                 {
-                    prefix += getString(child_node.labelOffset,child_node.labelLength);
+                    prefix += getString(child_node.labelOffset,child_node.labelLength).substr(commonLen);
                 }
                 return child_idx;
             }

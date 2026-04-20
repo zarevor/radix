@@ -9,14 +9,11 @@
 #include "Radix.hpp"
 #include <filesystem>
 #include<fstream>
+#include<fstream>
+
 int main()
 {
-     setlocale(LC_ALL,"ru");
-    /* SetConsoleCP(1251);
-    SetConsoleOutputCP(1251);  */
 
-    SetConsoleCP(65001);
-    SetConsoleOutputCP(65001);
     OptimizedRadixTree tree;
 
     /* tree.insert("вагон");
@@ -34,7 +31,7 @@ int main()
     tree.insert("здрав");
     tree.print(); */
 
-    // SetConsoleOutputCP(CP_UTF8);
+     SetConsoleOutputCP(CP_UTF8);
     std::string fileName = "rus-ir.bin";
      if (!std::filesystem::exists(fileName))
     {
@@ -106,21 +103,45 @@ int main()
         tree.deserialize(fileName);
     }
 
-    std::cout<<"word  "<<(tree.search("хвастливый")?"  exists":"  doesnt exists")<<std::endl;
-    std::string pref = "ал";
-    uint32_t ind = tree.findPrefixNode(0,pref);
+    std::ofstream file("words.txt");
+    if(!file.is_open()){
+        std::cerr<<"error"<<std::endl;
+    }
+
+    
+   // std::cout<<"word  "<<(tree.search("хвастливый")?"  exists":"  doesnt exists")<<std::endl;
+    std::string pref = "ман";
+    auto result = tree.findWordsWithPrefix(pref);
+    
+    for (auto line : result)
+    {
+        file<<line;
+        file<<"\n";
+    }
+    //file.close();
+
+
 
 
     std::string line;
 
     //tree.findPrefixNode
 
-    /* while(std::getline(std::cin,line)){
-        if(line == "стоп"){
+
+    while(std::getline(std::cin,line)){
+        auto words = tree.findWordsWithPrefix(line);
+
+        for (auto &&i : words)
+        {
+            std::cout<<i<<std::endl;
+        }
+        
+
+        /* if(line == "стоп"){
             break;
         }
-        std::cout<<"word  "<<line<<(tree.search(line)?"  exists":"  doesnt exists")<<std::endl;
-    } */
+        std::cout<<"word  "<<line<<(tree.search(line)?"  exists":"  doesnt exists")<<std::endl; */
+    }
     /* std::ofstream file("log.txt",std::ios::trunc);
     file.close();
     tree.insert("шалаш");

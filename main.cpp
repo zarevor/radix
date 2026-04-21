@@ -32,6 +32,9 @@ int main()
     tree.print(); */
 
      SetConsoleOutputCP(CP_UTF8);
+     SetConsoleCP(CP_UTF8);
+     //SetConsoleInputCP(CP_UTF8);
+     
     std::string fileName = "rus-ir.bin";
      if (!std::filesystem::exists(fileName))
     {
@@ -110,14 +113,14 @@ int main()
 
     
    // std::cout<<"word  "<<(tree.search("хвастливый")?"  exists":"  doesnt exists")<<std::endl;
-    std::string pref = "ман";
+    /* std::string pref = "ман";
     auto result = tree.findWordsWithPrefix(pref);
     
     for (auto line : result)
     {
         file<<line;
         file<<"\n";
-    }
+    } */
     //file.close();
 
 
@@ -129,17 +132,35 @@ int main()
 
 
     while(std::getline(std::cin,line)){
-        auto words = tree.findWordsWithPrefix(line);
-
-        for (auto &&i : words)
+        if(line.empty()||line==" ")
         {
-            std::cout<<i<<std::endl;
-        }
-        
+          std::cout<<"пустая строка"<<std::endl;  
+          continue;
+        } 
 
-        /* if(line == "стоп"){
+        if(line == "стоп"){
             break;
         }
+        auto words = tree.findWordsWithPrefix(line);
+
+        if(words.empty()){
+            
+            std::cout<<"нет слов с префиксом  "<<line<<std::endl;
+            continue;
+        } 
+        
+        
+        for (int i = words.size() - 1; i >= 0; i--)
+        {
+
+            std::cout<<words[i]<<std::endl;
+            
+        }
+        std::cout<<"слова с префиксом  "<<line<<std::endl;
+        
+        
+
+        /* 
         std::cout<<"word  "<<line<<(tree.search(line)?"  exists":"  doesnt exists")<<std::endl; */
     }
     /* std::ofstream file("log.txt",std::ios::trunc);

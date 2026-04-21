@@ -498,6 +498,7 @@ public:
         return newIdx;
     }
     std::vector<std::string> findWordsWithPrefix(const std::string& prefix) {
+        if(prefix == " "||prefix.empty()) return {};
         std::string mut_prefix = prefix;
         uint32_t node_idx = findPrefixNode(0, mut_prefix);
 

@@ -158,15 +158,14 @@ public:
             {
                 nodes[i].firstChildOffset++;
 
-                
             }
             
         }
         
         //print();
         if(children.size()>insertPos+1){
-            uint32_t curParentOffset = children[insertPos].nodeOffset;
-            uint32_t nextParentOffset = children[insertPos+1].nodeOffset;
+            uint32_t curNodeIndex = children[insertPos].nodeOffset;
+            uint32_t shiftedNodeIndex = children[insertPos+1].nodeOffset;
 
             //в этом коде я проверяю следующего ребенка который после вставки был сдвинут
             // на 1 позицию 
@@ -174,16 +173,18 @@ public:
             // мы обновляем offset у родителя сдвинутого ребенка, что бы он корректно указывал
             //на новое смещение своего первого ребенка
 
-            Node& nextChildNode = nodes[nextParentOffset];
-            Node& nextParentNode = nodes[nextChildNode.parentOffset];
+            Node& shiftedChildNode = nodes[shiftedNodeIndex];
+            Node& shiftedParentNode = nodes[shiftedChildNode.parentOffset];
+            
 
-            Node& currChildNode = nodes[curParentOffset];
+            Node& currChildNode = nodes[curNodeIndex];
             Node& currParentNode = nodes[currChildNode.parentOffset];
             
-            if(nextParentNode.firstChildOffset==insertPos&&parent.childrenCount!=0&&currChildNode.parentOffset!=nextChildNode.parentOffset){
-                std::string str = getString(nextChildNode.labelOffset,nextChildNode.labelLength);
+            if(shiftedParentNode.firstChildOffset==insertPos&&parent.childrenCount!=0&&
+            currChildNode.parentOffset!=shiftedChildNode.parentOffset){
+                //std::string str = getString(shiftedChildNode.labelOffset,shiftedChildNode.labelLength);
                 //std::cout<<"updated"<<std::endl;
-                nextParentNode.firstChildOffset++;
+                shiftedParentNode.firstChildOffset++;
             }
         }
 
@@ -450,15 +451,7 @@ public:
     {
         Node newNode;
         newNode.firstChildOffset = children.size();
-       /*  if(parentIdx!= UINT32_MAX){
-            Node& parentNode = nodes[parentIdx];
-            if (parentNode.firstChildOffset == children.size())
-            {
-                children.resize(parentNode.firstChildOffset+1);
-                newNode.firstChildOffset = children.size();
-            }
-            
-        } */
+
         newNode.labelOffset = addString(label);
         newNode.labelLength = label.length();
 
@@ -509,8 +502,8 @@ public:
         auto found = getString(nodes[node_idx].labelOffset,nodes[node_idx].labelLength);
 
 
-        std::function<void(uint32_t,const std::string&,std::vector<std::string>&)> collect = 
-        [&](uint32_t idx,const std::string& current,std::vector<std::string>& result){
+       auto collect = 
+        [&](auto&& self,uint32_t idx,const std::string& current,std::vector<std::string>& result)->void{
             Node& node = nodes[idx];
             if(node.isEndOfWord){
                 result.push_back(current);
@@ -521,32 +514,13 @@ public:
                 Node& childNode = nodes[entry.nodeOffset];
                 std::string child_prefix = getString(childNode.labelOffset,childNode.labelLength);
 
-                collect(entry.nodeOffset,current+child_prefix,result);
+                self(self,entry.nodeOffset,current+child_prefix,result);
             }
         };
         std::vector<std::string> result;
-        collect(node_idx,mut_prefix,result);
-
-        /* void collectWords(RadixNode * node, const std::wstring &current,
-                          std::vector<std::wstring> &result)
-        {
-            if (node->is_end)
-            {
-                result.push_back(current);
-            }
-            for (auto child : node->children)
-            {
-                collectWords(child, current + child->label, result);
-            }
-        } */
+        collect(collect,node_idx,mut_prefix,result);
 
 
-        /* if (node) {
-            
-            
-            collectWords(node, prefix, result);
-
-        } */
         return result;
     }
 
@@ -592,7 +566,7 @@ public:
            // std::wcout<<"node has "<<child->label<<" :"<<child->children.size()<<std::endl;
 
 
-            size_t minLen = std::min(restPrefix.length(),chPrefLength);
+            size_t minLen = std::min(restPrefLen,chPrefLength);
             size_t commonLen = 0;
 
 

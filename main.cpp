@@ -31,8 +31,8 @@ int main()
     tree.insert("здрав");
     tree.print(); */
 
-     SetConsoleOutputCP(CP_UTF8);
-     SetConsoleCP(CP_UTF8);
+     /* SetConsoleOutputCP(CP_UTF8);
+     SetConsoleCP(CP_UTF8); */
      //SetConsoleInputCP(CP_UTF8);
      
     std::string fileName = "rus-ir.bin";
@@ -97,8 +97,6 @@ int main()
 
             prev_c = c;
         }
-
-        
         
         tree.serialize(fileName);
     }else
@@ -112,7 +110,7 @@ int main()
     }
 
     
-   // std::cout<<"word  "<<(tree.search("хвастливый")?"  exists":"  doesnt exists")<<std::endl;
+    std::cout<<"word  "<<(tree.search("хвостливый")?"  exists":"  doesnt exists")<<std::endl;
     /* std::string pref = "ман";
     auto result = tree.findWordsWithPrefix(pref);
     
@@ -131,7 +129,7 @@ int main()
     //tree.findPrefixNode
 
 
-    while(std::getline(std::cin,line)){
+    /* while(std::getline(std::cin,line)){
         if(line.empty()||line==" ")
         {
           std::cout<<"пустая строка"<<std::endl;  
@@ -158,11 +156,8 @@ int main()
         }
         std::cout<<"слова с префиксом  "<<line<<std::endl;
         
-        
-
-        /* 
-        std::cout<<"word  "<<line<<(tree.search(line)?"  exists":"  doesnt exists")<<std::endl; */
-    }
+    
+    } */
     /* std::ofstream file("log.txt",std::ios::trunc);
     file.close();
     tree.insert("шалаш");

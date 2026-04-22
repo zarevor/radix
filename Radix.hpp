@@ -110,6 +110,7 @@ public:
         return UINT32_MAX;
     }
 
+    void updateOffsets(uint32_t insertPos){}
     // Добавление ребенка
     void addChild(uint32_t parentIdx, char32_t key, uint32_t childIdx)
     {
@@ -164,20 +165,27 @@ public:
         
         //print();
         if(children.size()>insertPos+1){
+            //индекс узла нового ребенка
             uint32_t curNodeIndex = children[insertPos].nodeOffset;
+            //индекс узла смещенного ребенка
             uint32_t shiftedNodeIndex = children[insertPos+1].nodeOffset;
 
             //в этом коде я проверяю следующего ребенка который после вставки был сдвинут
             // на 1 позицию 
-            //если у нового ребенка и у сдвинутого разные родители.
-            // мы обновляем offset у родителя сдвинутого ребенка, что бы он корректно указывал
+            //если у нового ребенка и у сдвинутого разные родители,
+            // мы обновляем offset у родителя узла сдвинутого ребенка, что бы он корректно указывал
             //на новое смещение своего первого ребенка
+            //так же первое смещение ребенка у родителя, должно совпадать c позицией вставки
+            //достаточно просто проверить firstChildOffset у родителя сдвинутого ребенка
 
+            //узел смещенного ребенка
             Node& shiftedChildNode = nodes[shiftedNodeIndex];
+            //родитель узла смещенного ребенка
             Node& shiftedParentNode = nodes[shiftedChildNode.parentOffset];
             
-
+            //узел нового ребенка
             Node& currChildNode = nodes[curNodeIndex];
+            //родитель нового ребенка
             Node& currParentNode = nodes[currChildNode.parentOffset];
             
             if(shiftedParentNode.firstChildOffset==insertPos&&parent.childrenCount!=0&&

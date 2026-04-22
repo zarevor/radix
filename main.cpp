@@ -10,10 +10,11 @@
 #include <filesystem>
 #include<fstream>
 #include<fstream>
+#include"BKtree.hpp"
 
 int main()
 {
-
+    BKtree bkTree;
     OptimizedRadixTree tree;
 
     /* tree.insert("вагон");
@@ -75,6 +76,8 @@ int main()
                 if (!line.empty())
                     {
                         tree.insert(line);
+                        //bkTree.add_word(line);
+
                     }
 
                 auto wordStartIt = buffer.begin() + startPos;
@@ -108,6 +111,16 @@ int main()
     if(!file.is_open()){
         std::cerr<<"error"<<std::endl;
     }
+    bkTree.add_word("привет");
+    bkTree.add_word("хорошо");
+    bkTree.add_word("спасибо");
+    bkTree.add_word("заебис");
+    bkTree.add_word("сравнение");
+
+    std::string correctedWord= bkTree.try_correct("пивет");
+    std::string correctedWord2= bkTree.try_correct("славнение");
+
+    
 
     
     std::cout<<"word  "<<(tree.search("хвостливый")?"  exists":"  doesnt exists")<<std::endl;

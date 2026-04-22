@@ -112,49 +112,6 @@ class BKTree{
         }
         return dp[m];
        
-
-        
-
-        /* std::vector<int> prevRow(m+1), currRow(m+1), prevPrevRow(n+1);
-
-        for(int i=0; i<=m; i++){
-            prevRow[i] = i;
-        }
-
-        for (int i = 1; i < n; i++)
-        {
-            currRow[0] = i;
-            int rowMin =i;
-
-
-            for(int j =1; j<=m; j++){
-                int cost = (a[i-1] == b[j-1]) ? 0:1;
-
-                currRow[j] = std::min({
-                    prevRow[j]+1,  //delete
-                    currRow[j-1]+1, // insert
-                    prevRow[j-1] + cost // replace
-                });
-
-
-                if(i>1&&j>1&&
-                a[i-1]==b[j-2]&&
-                a[i-2]==b[j-1]){
-                    currRow[j] = std::min(currRow[j], prevPrevRow[j-2]+1);
-                }
-
-                rowMin = std::min(rowMin, currRow[j]);
-            }
-
-            prevPrevRow =prevRow;
-            prevRow =currRow;
-            
-
-            
-        }
-
-        return prevRow[m]; */
-        //return dp[m];
         
     }
 
@@ -199,10 +156,7 @@ class BKTree{
             if(!node) return;
 
             int d = distance(node->word, wrongWord);
-            /* std::wcout<<L"строка в узле - "<<node->word<<std::endl;
-            std::wcout<<L"опечатка - "<<wrongWord<<std::endl;
-            std::wcout<<L"дистанция левенштейна между ними  ="<<std::to_wstring(d)<<std::endl; */
-            
+           
 
 
             if(d < bestDist){

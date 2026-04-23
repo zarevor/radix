@@ -10,13 +10,13 @@
 class BKTree{
     private:
     struct Node{
-        std::wstring word;
+        std::string word;
         std::unordered_map<int,std::unique_ptr<Node>> children;
-        Node(const std::wstring& w):word(w){}
+        Node(const std::string& w):word(w){}
     };
     std::unique_ptr<Node> root;
 
-    int distance(const std::wstring& a, const std::wstring& b){
+    int distance(const std::string& a, const std::string& b){
         if(a == b) return 0;
         if(a.empty()) return b.length();
         if(b.empty()) return a.length();
@@ -26,7 +26,7 @@ class BKTree{
         for(int j=0;j<=m;j++)prev[j] =j;
 
         for (int i = 1; i <=n; i++)
-        {
+        {                            
             
             curr[0] = i;
             for (int j = 1 ; j <=m; j++)
@@ -116,13 +116,13 @@ class BKTree{
     }
 
     public: 
-    void add(const std::wstring& word){
+    void add(const std::string& word){
         if(!root){
             root =std::make_unique<Node>(word);
             return;
         }
-        std::function<void(Node*, const std::wstring&)> insert =
-        [&](Node* node, const std::wstring& w){
+        std::function<void(Node*, const std::string&)> insert =
+        [&](Node* node, const std::string& w){
             int d = distance(node->word,w);
             if(d == 0) return;
 
@@ -141,10 +141,10 @@ class BKTree{
     }
 
 
-    std::wstring try_correct(const std::wstring& wrongWord){
-        if(!root) return L"";
+    std::string try_correct(const std::string& wrongWord){
+        if(!root) return "";
 
-        std::wstring bestWord = L"";
+        std::string bestWord = "";
 
         int bestDist = INT_MAX;
         int depth = 0;
@@ -186,10 +186,10 @@ class BKTree{
         };
 
         search(root.get(), 1 , depth);
-        std::wcout<<L"depth of word  "<<bestWord<<L"  ="<<depth<<std::endl;
+        std::cout<<L"depth of word  "<<bestWord<<"  ="<<depth<<std::endl;
 
 
-        return (bestDist <= 2) ? bestWord : L"";
+        return (bestDist <= 2) ? bestWord : "";
 
     }
 

@@ -3,6 +3,7 @@
 #include<string>
 #include<algorithm>
 #include<functional>
+#include"utf8.h"
 
 class BKtree
 {
@@ -193,12 +194,15 @@ public:
             Node& currentNode = nodes[node_idx];
             std::string word = get_string(currentNode.wordOffset,currentNode.wordLength);
             uint32_t d = distance(word,wrongWord);
+
             if (d < bestDist)
             {
                 bestDist = d;
                 bestWord = word;
             }
-            if(bestDist == 0) return;
+            //if(bestDist == 0) return;
+            //if(bestDist<=2) return;
+            
 
             auto start = children.begin()+currentNode.firstChildOffset;
             auto end = start+ currentNode.childrenCount;
@@ -209,10 +213,10 @@ public:
             {
                 ChildEntry& child = *curr;
 
-                if (child.dist<=d+2&&child.dist>=d-2)
+                if (child.dist<=(d+bestDist)&&child.dist>=(d-bestDist))
                 {
                     search(child.nodeOffset);
-                    if(bestDist==0) return;
+                    //if(bestDist==0) return;
                 }
                 
                 curr++;
@@ -285,20 +289,20 @@ public:
         
         
         std::function<void(uint32_t, const std::string&)> insert =
-        [&](uint32_t node_idx, const std::string& wrong){
+        [&](uint32_t node_idx, const std::string& word){
             Node& node = nodes[node_idx];
             std::string node_word = get_string(node.wordOffset,node.wordLength);
-            int d = distance(node_word,wrong);
+            int d = distance(node_word,word);
             if(d == 0) return;
 
             uint32_t child_idx = find_child(node_idx,d);
 
             if(child_idx == UINT32_MAX){
-                uint32_t new_child_idx = create_node(wrong,node_idx);
+                uint32_t new_child_idx = create_node(word,node_idx);
                 add_child(node_idx,d,new_child_idx);
                 
             }else{
-                insert(child_idx, wrong);
+                insert(child_idx, word);
             }
             
         }; 
@@ -330,21 +334,23 @@ public:
 
     int distance(const std::string &a, const std::string &b)
     {
-        if (a == b)
+        std::u32string a32 = utf8::utf8to32(a);
+        std::u32string b32 = utf8::utf8to32(b);
+        if (a32 == b32)
             return 0;
-        if (a.empty())
-            return b.length();
-        if (b.empty())
-            return a.length();
+        if (a32.empty())
+            return b32.length();
+        if (b32.empty())
+            return a32.length();
 
-        int n = a.length(), m = b.length();
+        int n = a32.length(), m = b32.length();
 
         std::vector<int> dp(m + 1);
 
         for (int j = 0; j <= m; j++)
             dp[j] = j;
 
-        int prev_prev_diag = 0;
+       // int prev_prev_diag = 0;
 
         for (int i = 1; i <= n; i++)
         {
@@ -356,7 +362,7 @@ public:
             for (int j = 1; j <= m; j++)
             {
                 int old_dp_j = dp[j];
-                int cost = (a[i - 1] == b[j - 1]) ? 0 : 1;
+                int cost = (a32[i - 1] == b32[j - 1]) ? 0 : 1;
 
                 dp[j] = std::min({dp[j] + 1,
                                   dp[j - 1] + 1,
@@ -369,12 +375,76 @@ public:
                     dp[j] = std::min(dp[j], prev_prev_diag + 1);
                 } */
 
-                //prev_prev_diag = prev_diag;
+               // prev_prev_diag = prev_diag;
                 prev_diag = old_dp_j;
             }
         }
         return dp[m];
     }
+
+
+    bool serialize(const std::string& pathName){
+        std::ofstream file(pathName,std::ios::binary);
+
+        if (!file.is_open())
+        {
+            return false;
+        }
+        else
+        {
+            uint32_t nodesSize = nodes.size();
+            file.write(reinterpret_cast<char *>(&nodesSize), sizeof(uint32_t));
+            file.write(reinterpret_cast<char *>(nodes.data()), nodesSize * sizeof(Node));
+
+            uint32_t childrenSize = children.size();
+
+            file.write(reinterpret_cast<char *>(&childrenSize), sizeof(uint32_t));
+            file.write(reinterpret_cast<char *>(children.data()), childrenSize * sizeof(ChildEntry));
+
+            uint32_t bufferSize = words.size();
+
+            file.write(reinterpret_cast<char *>(&bufferSize), sizeof(uint32_t));
+            file.write(words.data(), bufferSize);
+
+            return true;
+        }
+
+        
+    };
+    bool deserialize(const std::string &pathName)
+        {
+            std::ifstream file(pathName, std::ios::binary);
+
+            if (!file.is_open())
+            {
+                return false;
+            }
+            else
+            {
+                nodes.clear();
+                children.clear();
+                words.clear();
+                uint32_t nodesSize;
+
+                file.read(reinterpret_cast<char *>(&nodesSize), sizeof(uint32_t));
+                nodes.resize(nodesSize);
+
+                file.read(reinterpret_cast<char *>(nodes.data()), nodesSize * sizeof(Node));
+
+                uint32_t childrenSize;
+
+                file.read(reinterpret_cast<char *>(&childrenSize), sizeof(uint32_t));
+                children.resize(childrenSize);
+                file.read(reinterpret_cast<char *>(children.data()), childrenSize * sizeof(ChildEntryUTF8));
+
+                uint32_t bufferSize;
+
+                file.read(reinterpret_cast<char *>(&bufferSize), sizeof(uint32_t));
+                words.resize(bufferSize);
+                file.read(words.data(), bufferSize);
+
+                return true;
+            }
+        };
+
 };
-
-

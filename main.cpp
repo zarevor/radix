@@ -11,6 +11,7 @@
 #include<fstream>
 #include<fstream>
 #include"BKtree.hpp"
+#include<random>
 
 int main()
 {
@@ -75,7 +76,9 @@ int main()
                 std::string line = std::string(buffer.begin() + startPos, buffer.begin() + (curPos - 2));
                 if (!line.empty())
                     {
+
                         tree.insert(line);
+                        //str.push_back
                         //bkTree.add_word(line);
 
                     }
@@ -107,20 +110,60 @@ int main()
         tree.deserialize(fileName);
     }
 
-    std::ofstream file("words.txt");
-    if(!file.is_open()){
-        std::cerr<<"error"<<std::endl;
-    }
-    bkTree.add_word("привет");
-    bkTree.add_word("хорошо");
-    bkTree.add_word("спасибо");
-    bkTree.add_word("заебис");
-    bkTree.add_word("сравнение");
+    if(!std::filesystem::exists("bkTree.bin")){
 
-    std::string correctedWord= bkTree.try_correct("пивет");
-    std::string correctedWord2= bkTree.try_correct("славнение");
+        std::ifstream file("lines.txt");
+        if (!file.is_open())
+        {
+            std::cerr << "error" << std::endl;
+        }
+        std::string l;
+        std::vector<std::string> lines;
+
+        while (std::getline(file, l))
+        {
+            if (!l.empty() && l != " ")
+            {
+
+                lines.push_back(l);
+            }
+        }
+        std::random_device rd;
+        std::mt19937 gen(rd());
+
+        std::shuffle(lines.begin(), lines.end(), gen);
+        for (size_t i = 0; i < lines.size(); i++)
+        {
+            bkTree.add_word(lines[i]);
+        }
+        bkTree.serialize("bkTree.bin");
+    }else{
+        bkTree.deserialize("bkTree.bin");
+    }
 
     
+
+
+
+
+    std::string correctedWord24= bkTree.try_correct("самодовлбный");
+    std::string correctedWord23= bkTree.try_correct("воплосиьельный");
+    std::string correctedWord22= bkTree.try_correct("каеугольный");
+    std::string correctedWord9= bkTree.try_correct("славный");
+    std::string correctedWord20= bkTree.try_correct("славто");
+
+    std::string correctedWord11= bkTree.try_correct("сонлмфый");
+    std::string correctedWord= bkTree.try_correct("сьабый");
+    std::string correctedWord2= bkTree.try_correct("славнениие");
+    std::string correctedWord3= bkTree.try_correct("смабый");
+    std::string correctedWord4= bkTree.try_correct("славнее");
+    std::string correctedWord6= bkTree.try_correct("славненик");
+    std::string correctedWord5= bkTree.try_correct("1");
+    std::string correctedWord7= bkTree.try_correct("калова");
+
+
+
+
 
     
     std::cout<<"word  "<<(tree.search("хвостливый")?"  exists":"  doesnt exists")<<std::endl;

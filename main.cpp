@@ -3,7 +3,6 @@
 #include <fstream>
 #include <algorithm>
 #include "utf8.h"
-#include <windows.h>
 #include <locale>
 #include <array>
 #include "Radix.hpp"
@@ -185,7 +184,7 @@ int main()
     //tree.findPrefixNode
 
 
-    /* while(std::getline(std::cin,line)){
+     while(std::getline(std::cin,line)){
         if(line.empty()||line==" ")
         {
           std::cout<<"пустая строка"<<std::endl;  
@@ -196,6 +195,14 @@ int main()
             break;
         }
         auto words = tree.findWordsWithPrefix(line);
+        if(words.empty()){
+            std::string corrected_line = bkTree.try_correct(line);
+            if (!corrected_line.empty())
+            {
+                words = tree.findWordsWithPrefix(corrected_line);
+            }
+            
+        }
 
         if(words.empty()){
             
@@ -213,7 +220,7 @@ int main()
         std::cout<<"слова с префиксом  "<<line<<std::endl;
         
     
-    } */
+    } 
     /* std::ofstream file("log.txt",std::ios::trunc);
     file.close();
     tree.insert("шалаш");

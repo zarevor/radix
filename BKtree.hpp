@@ -343,6 +343,8 @@ public:
         if (b32.empty())
             return a32.length();
 
+            
+
         int n = a32.length(), m = b32.length();
 
         std::vector<int> dp(m + 1);

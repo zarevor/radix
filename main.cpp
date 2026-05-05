@@ -11,35 +11,48 @@
 #include<fstream>
 #include"BKtree.hpp"
 #include<random>
+#include"json.hpp"
+#include<chrono>
+#include"DodRadix.hpp"
+
+void copyToDod(DodRadix& dod,OptimizedRadixTree& optRad){
+    auto& nodes = optRad.nodes;
+    auto& prefBuffer = optRad.prefixBuffer;
+    auto& children = optRad.children;
+
+
+    for (size_t i = 0; i < nodes.size(); i++)
+    {
+        dod.labelLength.push_back(nodes[i].labelLength);
+        dod.labelOffset.push_back(nodes[i].labelOffset);
+        dod.firstChildOffset.push_back(nodes[i].firstChildOffset);
+        dod.childrenCount.push_back(nodes[i].childrenCount);
+        dod.parentOffset.push_back(nodes[i].parentOffset);
+        dod.isEndOfWord.push_back(nodes[i].isEndOfWord);
+        
+    }
+    for (size_t i = 0; i < children.size(); i++)
+    {
+        dod.keys.push_back(children[i].key);
+        dod.nodeOffset.push_back(children[i].nodeOffset);
+    }
+    dod.strBuffer = prefBuffer;
+    
+    
+}
 
 int main()
 {
     BKtree bkTree;
     OptimizedRadixTree tree;
+    auto startClock = std::chrono::high_resolution_clock::now();
 
-    /* tree.insert("вагон");
-    tree.insert("вагончик");
-    tree.insert("вагонный");
-    
-    tree.insert("железо");
-    tree.insert("корабль");
-    tree.insert("железобетонный");
-    tree.insert("живой");
-    tree.insert("волшебный");
-    tree.insert("во");
-    tree.insert("здоровый");
-    tree.insert("за");
-    tree.insert("здрав");
-    tree.print(); */
 
-     /* SetConsoleOutputCP(CP_UTF8);
-     SetConsoleCP(CP_UTF8); */
-     //SetConsoleInputCP(CP_UTF8);
      
     std::string fileName = "rus-ir.bin";
      if (!std::filesystem::exists(fileName))
     {
-       std::vector<char> buffer;
+        std::vector<char> buffer;
         {
             std::ifstream file("mdict.txt", std::ios::binary);
             if (!file.is_open())
@@ -121,6 +134,13 @@ int main()
 
         while (std::getline(file, l))
         {
+            auto pos = l.find("\r");
+            if (pos!=std::string::npos)
+            {
+                l = l.substr(0,pos);
+                /* code */
+            }
+            
             if (!l.empty() && l != " ")
             {
 
@@ -140,44 +160,21 @@ int main()
         bkTree.deserialize("bkTree.bin");
     }
 
+    auto endClock = std::chrono::high_resolution_clock::now();
+
+
+    auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endClock-startClock);
     
-
-
-
-
-    std::string correctedWord24= bkTree.try_correct("самодовлбный");
-    std::string correctedWord23= bkTree.try_correct("воплосиьельный");
-    std::string correctedWord22= bkTree.try_correct("каеугольный");
-    std::string correctedWord9= bkTree.try_correct("славный");
-    std::string correctedWord20= bkTree.try_correct("славто");
-
-    std::string correctedWord11= bkTree.try_correct("сонлмфый");
-    std::string correctedWord= bkTree.try_correct("сьабый");
-    std::string correctedWord2= bkTree.try_correct("славнениие");
-    std::string correctedWord3= bkTree.try_correct("смабый");
-    std::string correctedWord4= bkTree.try_correct("славнее");
-    std::string correctedWord6= bkTree.try_correct("славненик");
-    std::string correctedWord5= bkTree.try_correct("1");
-    std::string correctedWord7= bkTree.try_correct("калова");
-
-
-
-
+    std::cout<<"время чтения бинарных файлов составило  "<<duration.count()<<"  микросекунд"<<std::endl;
 
     
     std::cout<<"word  "<<(tree.search("хвостливый")?"  exists":"  doesnt exists")<<std::endl;
-    /* std::string pref = "ман";
-    auto result = tree.findWordsWithPrefix(pref);
+
+
+    DodRadix dod;
+
+    copyToDod(dod,tree);
     
-    for (auto line : result)
-    {
-        file<<line;
-        file<<"\n";
-    } */
-    //file.close();
-
-
-
 
     std::string line;
 
@@ -194,15 +191,21 @@ int main()
         if(line == "стоп"){
             break;
         }
-        auto words = tree.findWordsWithPrefix(line);
+        auto s = std::chrono::high_resolution_clock::now();
+        auto words = dod.findWordsWithPrefix(line);
         if(words.empty()){
             std::string corrected_line = bkTree.try_correct(line);
             if (!corrected_line.empty())
             {
-                words = tree.findWordsWithPrefix(corrected_line);
+                words = dod.findWordsWithPrefix(corrected_line);
             }
             
         }
+        auto e =std::chrono::high_resolution_clock::now();
+
+        auto dur = std::chrono::duration_cast<std::chrono::milliseconds>(e-s);
+        std::cout<<"слова с префиксом  "<<"'"<<line<<"'"<<"  были найдены за ";
+        std::cout<<dur.count()<<"  млс"<<std::endl; 
 
         if(words.empty()){
             
@@ -221,124 +224,7 @@ int main()
         
     
     } 
-    /* std::ofstream file("log.txt",std::ios::trunc);
-    file.close();
-    tree.insert("шалаш");
-    tree.print();
-    tree.insert("шалость");
-    tree.print();
-    tree.insert("шакал");
-    tree.print();
-    tree.insert("шалить");
-    tree.print();
 
-    tree.insert("шальной");
-    tree.print();
-    //удивительно. но когда я меняю смещение в ручную. дерево строится правильно.
-    //значит где ошибка в addChild. пока не могу понять
-    
-
-
-    tree.insert("шаловливый");
-    tree.print();
-
-
-    tree.insert("шалашный");
-    tree.print(); 
-    tree.insert("шалашные");
-    tree.print(); 
-    tree.insert("шабашка");
-    tree.print(); 
-    tree.insert("шерсть");
-    tree.print(); 
-    tree.insert("шерстяной");
-    tree.print(); 
-    tree.insert("вровень");
-    tree.print(); 
-
-    tree.insert("кусать");
-    tree.print(); 
-    tree.insert("мастерить");
-    tree.print(); 
-    tree.insert("матрас");
-    tree.print();  */
-
-
-
-    /*  for (size_t i = 0; i < tree.children.size(); i++)
-    {
-        std::cout<<tree.children[i].key<<std::endl;
-    } */
-
-    std::cout << tree.nodes.size() << std::endl;
-    std::cout<<"nodes count is  "<<tree.nodes.size()<<std::endl;
-    std::cout<<"children count is  "<<tree.children.size()<<std::endl;
-
-
-    
-
-
-    //tree.insert("шаловливый");
-    /* tree.insert("здоровый");
-    tree.insert("задира");
-
-    tree.insert("враг");
-    tree.insert("шлем");
-    tree.insert("шваль");
-    tree.insert("шлак");
-
-    tree.insert("шалун");
-    
-
-    std::cout << tree.nodes.size() << std::endl;
-    std::cout<<"nodes count is  "<<tree.nodes.size()<<std::endl;
-    std::cout<<"children count is  "<<tree.children.size()<<std::endl;
-
-
-    //
-
-    std::cout << tree.search("эксперимснтальный") << std::endl;
-    std::cout << tree.search("алчность") << std::endl;
-    std::cout << tree.search("вагон") << std::endl;
-    std::cout << tree.search("траляля") << std::endl;
-    std::cout << tree.search("шалун") << std::endl;
-    std::cout << tree.search("шалунн") << std::endl;
-    std::cout << tree.search("град") << std::endl;
-    std::cout << tree.search("_г.") << std::endl;
-    std::cout << tree.search("шаловливый") << std::endl;
-
-
-   
-    
-
-    /* std::string in;
-    while(std::getline(std::cin,in)){
-        std::cout<<"type word to find in tree"<<std::endl;
-        if (tree.search(in))
-        {
-            std::cout<<"word  "<<in<<"  found"<<std::endl;
-
-        }else{
-            std::cout<<"word  "<<in<<" not found"<<std::endl;
-        }
-
-    } */
-
-    // tree.print();
-
-    /* std::ofstream fileOut("lines.txt");
-
-
-
-    if(fileOut.is_open()){
-        for (size_t i = 0; i < str.size(); i++)
-        {
-            fileOut<<str[i]<<std::endl;
-        }
-        std::cout<<"writed"<<std::endl;
-
-        fileOut.close();
-    } */
 
     system("pause");
 

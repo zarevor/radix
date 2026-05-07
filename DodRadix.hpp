@@ -3,8 +3,9 @@
 #include<string>
 #include<algorithm>
 #include"utf8.h"
+#include"json.hpp"
 
-
+using namespace nlohmann;
 
 class DodRadix
 {
@@ -35,6 +36,59 @@ public:
     std::string getString(uint32_t offset, uint32_t length) const
     {
         return std::string(strBuffer.data() + offset, length);
+    }
+
+    bool serializeToJson(const std::string& fileName){
+        json j;
+        j["labelOffset"] = labelOffset;
+        j["labelLength"] = labelLength;
+        j["firstChildOffset"] = firstChildOffset;
+        j["childrenCount"] = childrenCount;
+        j["parentOffset"] = parentOffset;
+        j["isEnd"] = isEndOfWord;
+
+        j["keys"] = keys;
+        j["nodeOffset"] = nodeOffset;
+
+        j["strBuffer"] = strBuffer;
+
+        std::ofstream file(fileName);
+        if(!file.is_open()){
+            std::cerr<<"cant open file"<<std::endl;
+            return false;
+        }
+
+        file<<j.dump();
+
+        file.close();
+        return true;
+    }
+
+    bool desirealizeFromJson(const std::string& fileName){
+        std::ifstream file(fileName);
+        if(!file.is_open()){
+            std::cerr<<"cant open file"<<std::endl;
+            return false;
+        }
+        json j;
+        file>>j;
+
+        labelOffset = j["labelOffset"].get<std::vector<uint32_t>>();
+        labelLength = j["labelLength"].get<std::vector<uint32_t>>();
+        firstChildOffset = j["firstChildOffset"].get<std::vector<uint32_t>>();
+        childrenCount = j["childrenCount"].get<std::vector<uint32_t>>();
+        parentOffset = j["parentOffset"].get<std::vector<uint32_t>>();
+        isEndOfWord = j["isEnd"].get<std::vector<uint8_t>>();
+        
+        keys = j["keys"].get<std::vector<char32_t>>();
+        nodeOffset = j["nodeOffset"].get<std::vector<uint32_t>>();
+        
+        
+        strBuffer = j["strBuffer"].get<std::vector<char>>();
+        //strBuffer.assign(str.begin(), str.end());
+
+        return true;
+
     }
 
     // Поиск ребенка по первому символу

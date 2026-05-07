@@ -173,7 +173,11 @@ int main()
 
     DodRadix dod;
 
-    copyToDod(dod,tree);
+    //copyToDod(dod,tree);
+
+    //dod.serializeToJson("radix.json");
+
+    dod.desirealizeFromJson("radix.json");
     
 
     std::string line;

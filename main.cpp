@@ -165,10 +165,10 @@ int main()
 
     auto duration = std::chrono::duration_cast<std::chrono::milliseconds>(endClock-startClock);
     
-    std::cout<<"время чтения бинарных файлов составило  "<<duration.count()<<"  микросекунд"<<std::endl;
+    std::cout<<"время чтения бинарных файлов составило  "<<duration.count()<<"  миллисекунд"<<std::endl;
 
     
-    std::cout<<"word  "<<(tree.search("хвостливый")?"  exists":"  doesnt exists")<<std::endl;
+    std::cout<<"word  "<<(tree.search("яблоко")?"  exists":"  doesnt exists")<<std::endl;
 
 
     DodRadix dod;
@@ -178,6 +178,18 @@ int main()
     //dod.serializeToJson("radix.json");
 
     dod.desirealizeFromJson("radix.json");
+
+    OptimizedRadixTree treeTest;
+    treeTest.insert("яблоко","apple");
+    treeTest.insert("яблочный пирог","apple pie");
+    treeTest.insert("яблоки","apples");
+    treeTest.insert("яблочный мир","apple world");
+    treeTest.insert("банан","banana");
+    treeTest.insert("еда","food");
+    treeTest.insert("есть","eating");
+
+    std::cout<<"word  "<<(treeTest.search("яблоко")?"  exists":"  doesnt exists")<<std::endl;
+    std::cout<<treeTest.findTranslation("яблочный мир")<<std::endl;
     
 
     std::string line;

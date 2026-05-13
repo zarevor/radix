@@ -16,7 +16,10 @@ public:
     std::vector<uint32_t> firstChildOffset;
     std::vector<uint32_t> childrenCount;
     std::vector<uint32_t> parentOffset;
+    std::vector<uint32_t> translationOffset;
+    std::vector<uint32_t> translationLength;
     std::vector<uint8_t> isEndOfWord;
+    
     //ChildEntryData
     std::vector<char32_t> keys;
     std::vector<uint32_t> nodeOffset;

@@ -22,9 +22,11 @@ struct Node
     uint32_t childrenCount;    // количество детей
     uint32_t parentOffset;     // смещение родителя (для обратной навигации)
     uint8_t isEndOfWord;       // флаг конца слова
+    uint32_t transLength;
+    uint32_t transOffset;
 
     Node() : labelOffset(0), labelLength(0), firstChildOffset(0),
-             childrenCount(0), parentOffset(0), isEndOfWord(0) {}
+             childrenCount(0), parentOffset(0), isEndOfWord(0),transLength(0),transOffset(0) {}
 };
 
 // Структура для связи "символ -> узел"
@@ -74,11 +76,17 @@ public:
         prefixBuffer.insert(prefixBuffer.end(), str.begin(), str.end());
         return offset;
     }
+    uint32_t addTranslation(const std::string& t){
+        uint32_t offset = translatBuffer.size();
+        translatBuffer.insert(translatBuffer.end(),t.begin(),t.end());
+        return offset;
+    }
 
     std::string getString(uint32_t offset, uint32_t length) const
     {
         return std::string(prefixBuffer.data() + offset, length);
     }
+    //std::string getTranslation
 
     // Поиск ребенка по первому символу
     uint32_t findChild(uint32_t nodeIdx, char32_t key) const
@@ -269,7 +277,7 @@ public:
     }
 
     // *** ОСНОВНАЯ ФУНКЦИЯ INSERT **═*
-    void insert(const std::string &word)
+    void insert(const std::string &word,const std::string & trans="")
     {
         if (word.empty())
             return;
@@ -300,6 +308,8 @@ public:
             
 
                 nodes[newIdx].isEndOfWord = true;
+                nodes[newIdx].transOffset = addTranslation(trans);
+                nodes[newIdx].transLength = trans.length();
                 return;
             }
 
@@ -380,6 +390,8 @@ public:
             oldRemainder.labelOffset = oldChild.labelOffset + commonPrefix.length();
             oldRemainder.labelLength = childRemainder.length();
             oldRemainder.isEndOfWord = oldChild.isEndOfWord;
+            oldRemainder.transOffset = oldChild.transOffset;
+            oldRemainder.transLength = oldChild.transLength;
             oldRemainder.firstChildOffset = oldChild.firstChildOffset;
             oldRemainder.childrenCount = oldChild.childrenCount;
 
@@ -415,6 +427,8 @@ public:
             {
                 // Новое слово заканчивается на разделителе
                 nodes[childIdx].isEndOfWord = true;
+                nodes[childIdx].transOffset = addTranslation(trans);
+                nodes[childIdx].transLength = trans.length();
             }
             else
             {
@@ -423,6 +437,8 @@ public:
                 uint32_t newRemainderIdx = createNode(newRemainder, childIdx);
                 //oldChild.firstChildOffset = children.size();
                 nodes[newRemainderIdx].isEndOfWord = true;
+                nodes[newRemainderIdx].transOffset = addTranslation(trans);
+                nodes[newRemainderIdx].transLength = trans.length();
                 auto newRemIt = newRemainder.begin();
                 auto newRemEnd = newRemainder.end();
                 char32_t remC = utf8::peek_next(newRemIt, newRemEnd);
@@ -449,13 +465,16 @@ public:
     }
 
     // Создание нового узла
-    uint32_t createNode(const std::string &label, uint32_t parentIdx)
+    uint32_t createNode(const std::string &label,uint32_t parentIdx)
     {
         Node newNode;
         newNode.firstChildOffset = children.size();
 
         newNode.labelOffset = addString(label);
         newNode.labelLength = label.length();
+
+       
+        
 
 
         newNode.childrenCount = 0;
@@ -610,14 +629,12 @@ public:
         //заглушка
         return current;
     }
-
-    // Поиск слова
-    bool search(const std::string &word) const
-    {
-        if (word.empty())
+    
+    bool searchWord(const std::string &word, uint32_t& currentIdx) const{
+         if (word.empty())
             return false;
 
-        uint32_t currentIdx = 0;
+        
         size_t wordPos = 0;
         size_t wordLen = word.length();
         auto wordStart = word.begin();
@@ -672,9 +689,36 @@ public:
              */
             // utf8::prior(currWord,wordStart);
             currentIdx = childIdx;
+            
         }
-
         return nodes[currentIdx].isEndOfWord;
+
+    }
+    bool search(const std::string& word, uint32_t& currentIdx) const{
+        //searchWord(word,currentIdx);
+        return searchWord(word,currentIdx);
+    }
+
+
+    // Поиск слова
+    bool search(const std::string &word) const
+    {
+        uint32_t currentIdx = 0;
+       
+        
+        return searchWord(word,currentIdx);
+    }
+    std::string findTranslation(const std::string& word){
+        uint32_t index =0;
+        if (search(word,index))
+        {
+            Node& node = nodes[index];
+            std::string l = std::string(translatBuffer.data()+node.transOffset,node.transLength);
+            return l;
+
+        }
+        
+        return {};
     }
     // Вспомогательная функция для отладки
     void print() const

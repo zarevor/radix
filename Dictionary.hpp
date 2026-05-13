@@ -104,7 +104,7 @@ private:
         std::vector<std::string> words;
         std::string binName;
         if (!std::filesystem::exists("rus-ir.bin"))
-        {
+        { 
             words = parse(fileName);
             for (auto &&word : words)
             {
